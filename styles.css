@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    margin-bottom: 10px;
+  }
+  
+  .input-grid {
+    display: grid;
+    grid-template-columns: 100px auto;
+    grid-gap: 10px;
+  }
+
+  .button{
+    margin: 1em;
+    background-color: rgb(131, 131, 131);
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 0.5em;
+  }
+
+  .button--delete{
+    background-color: rgb(255, 0, 0);
+  }
+  
+  #data-container {
+    margin-bottom: 20px;
+  }
+  
+  .action-buttons {
+    display: inline-block;
+  }
+  
+  .action-buttons button {
+    margin-left: 5px;
+  }
+  
