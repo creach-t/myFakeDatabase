@@ -1,20 +1,4 @@
-var fakeDatabase = [
-/*   { id: 1, name: 'John', age: 25 },
-  { id: 2, name: 'Alice', age: 30 },
-  { id: 3, name: 'Bob', age: 35 },
-  { id: 4, name: 'Emma', age: 28 },
-  { id: 5, name: 'Michael', age: 40 },
-  { id: 6, name: 'Sophia', age: 22 },
-  { id: 7, name: 'William', age: 33 },
-  { id: 8, name: 'Olivia', age: 29 },
-  { id: 9, name: 'James', age: 37 },
-  { id: 10, name: 'Charlotte', age: 27 },
-  { id: 11, name: 'Daniel', age: 31 },
-  { id: 12, name: 'Emily', age: 36 },
-  { id: 13, name: 'Alexander', age: 26 },
-  { id: 14, name: 'Mia', age: 32 },
-  { id: 15, name: 'Ethan', age: 34 } */
-];
+var fakeDatabase = [];
 
 function displayData() {
   var container = document.getElementById('data-container');
