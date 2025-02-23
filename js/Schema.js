@@ -4,9 +4,10 @@ class Schema {
         this.loadSchema();
     }
 
-    createTable(tableName, fields) {
+    createTable(tableName, fields = { 'id': 'number' }) {
         if (this.tables[tableName]) {
-            throw new Error(`La table ${tableName} existe déjà`);
+            alert(`La table ${tableName} existe déjà`);
+            return;
         }
         this.tables[tableName] = fields;
         this.saveSchema();
@@ -39,5 +40,3 @@ class Schema {
         return this.tables[tableName] || null;
     }
 }
-
-export default Schema;
