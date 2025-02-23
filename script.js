@@ -1,142 +1,145 @@
-var fakeDatabase = [];
-
-function displayData() {
-  var container = document.getElementById('data-container');
-  container.innerHTML = '';
-
-  fakeDatabase.forEach(function(item) {
-    var row = document.createElement('tr');
-    row.innerHTML = '<td>' + item.id + '</td>' +
-                    '<td>' + item.name + '</td>' +
-                    '<td>' + item.age + '</td>' +
-                    '<td>' +
-                    '<button class="button" onclick="editData(' + item.id + ')">Modifier</button>' +
-                    '<button class="button button--delete" onclick="deleteData(' + item.id + ')">x</button>' +
-                    '</td>';
-    container.appendChild(row);
-  });
-  console.log(fakeDatabase);
-}
-
-function addOrUpdateData(event) {
-  event.preventDefault();
-
-  var nameInput = document.getElementById('name');
-  var ageInput = document.getElementById('age');
-  var name = nameInput.value.trim();
-  var age = parseInt(ageInput.value);
-
-  if (name === '' || isNaN(age)) {
-    alert('Veuillez remplir tous les champs correctement.');
-    return;
-  }
-
-  var idToUpdate = form.dataset.editId;
-  if (idToUpdate) {
-    // Met à jour les données existantes
-    var existingItem = fakeDatabase.find(function(item) {
-      return item.id == idToUpdate;
-    });
-
-    if (existingItem) {
-      existingItem.name = name;
-      existingItem.age = age;
+class Database {
+    constructor() {
+        this.data = [];
+        this.load();
     }
 
-    // Réinitialise l'attribut editId pour indiquer que nous ne sommes plus en mode édition
-    form.removeAttribute('data-edit-id');
-  } else {
-    // Trouve le plus bas ID non utilisé
-    var minId = 1;
-    for (var i = 1; i <= fakeDatabase.length + 1; i++) {
-      var idExists = fakeDatabase.some(function(item) {
-        return item.id === i;
-      });
-      if (!idExists) {
-        minId = i;
-        break;
-      }
+    add(item) {
+        const id = this.getNextId();
+        const newItem = { id, ...item };
+        this.data.push(newItem);
+        this.save();
+        return newItem;
     }
 
-    // Ajoute une nouvelle donnée avec l'ID le plus bas disponible
-    var newItem = {
-      id: minId,
-      name: name,
-      age: age
-    };
-    fakeDatabase.push(newItem);
-  }
+    update(id, newData) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index !== -1) {
+            this.data[index] = { ...this.data[index], ...newData };
+            this.save();
+        }
+    }
 
-  // Trie fakeDatabase par ID
-  fakeDatabase.sort(function(a, b) {
-    return a.id - b.id;
-  });
+    delete(id) {
+        this.data = this.data.filter(item => item.id !== id);
+        this.save();
+    }
 
-  displayData();
-  nameInput.value = '';
-  ageInput.value = '';
-  saveToCookie(fakeDatabase); // Sauvegarde les données dans le cookie
+    getNextId() {
+        return this.data.reduce((max, item) => Math.max(max, item.id), 0) + 1;
+    }
+
+    save() {
+        localStorage.setItem('database', JSON.stringify(this.data));
+    }
+
+    load() {
+        const saved = localStorage.getItem('database');
+        this.data = saved ? JSON.parse(saved) : [];
+    }
+
+    search(query) {
+        if (!query) return this.data;
+        query = query.toLowerCase();
+        return this.data.filter(item =>
+            item.name.toLowerCase().includes(query) ||
+            item.age.toString().includes(query)
+        );
+    }
 }
 
-function deleteData(id) {
-  fakeDatabase = fakeDatabase.filter(function(item) {
-    return item.id !== id;
-  });
+class UI {
+    constructor() {
+        this.db = new Database();
+        this.form = document.getElementById('data-form');
+        this.searchInput = document.getElementById('search');
+        this.currentId = null;
 
-  saveToCookie(fakeDatabase); // Met à jour le cookie après la suppression
+        this.form.addEventListener('submit', e => this.handleSubmit(e));
+        this.searchInput.addEventListener('input', e => this.handleSearch(e));
+        this.render();
+    }
 
-  console.log(fakeDatabase); // Affiche le contenu de fakeDatabase dans la console après suppression
-  displayData(); // Met à jour l'affichage après suppression
+    handleSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const age = parseInt(document.getElementById('age').value);
+
+        const errors = this.validate(name, age);
+        if (errors.length > 0) {
+            this.showErrors(errors);
+            return;
+        }
+
+        if (this.currentId) {
+            this.db.update(this.currentId, { name, age });
+            this.currentId = null;
+        } else {
+            this.db.add({ name, age });
+        }
+
+        this.form.reset();
+        document.querySelector('button[type="submit"]').textContent = 'Ajouter';
+        this.clearErrors();
+        this.render();
+    }
+
+    handleSearch(e) {
+        this.render(this.db.search(e.target.value));
+    }
+
+    validate(name, age) {
+        const errors = [];
+        if (name.length < 2) errors.push('Le nom doit contenir au moins 2 caractères');
+        if (!age || age < 0 || age > 150) errors.push('L\'âge doit être entre 0 et 150');
+        return errors;
+    }
+
+    showErrors(errors) {
+        const container = document.getElementById('errors');
+        container.innerHTML = errors.map(error => `<div>${error}</div>`).join('');
+    }
+
+    clearErrors() {
+        document.getElementById('errors').innerHTML = '';
+    }
+
+    edit(id) {
+        const item = this.db.data.find(item => item.id === id);
+        if (!item) return;
+
+        document.getElementById('name').value = item.name;
+        document.getElementById('age').value = item.age;
+        this.currentId = id;
+        document.querySelector('button[type="submit"]').textContent = 'Modifier';
+    }
+
+    delete(id) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
+            this.db.delete(id);
+            if (this.currentId === id) {
+                this.form.reset();
+                this.currentId = null;
+                document.querySelector('button[type="submit"]').textContent = 'Ajouter';
+            }
+            this.render();
+        }
+    }
+
+    render(data = this.db.data) {
+        const container = document.getElementById('data-container');
+        container.innerHTML = data.map(item => `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>${item.age}</td>
+                <td>
+                    <button class="button button--primary" onclick="ui.edit(${item.id})">Modifier</button>
+                    <button class="button button--delete" onclick="ui.delete(${item.id})">×</button>
+                </td>
+            </tr>
+        `).join('');
+    }
 }
 
-// Fonction pour sauvegarder les données dans un cookie
-function saveToCookie(data) {
-  var jsonData = JSON.stringify(data);
-  
-  // Définir une date d'expiration (7 jours à partir de maintenant)
-  var expirationDate = new Date();
-  expirationDate.setDate(expirationDate.getDate() + 7);
-
-  // Formatage de la date d'expiration au format UTC
-  var expires = expirationDate.toUTCString();
-
-  // Définir le cookie avec la date d'expiration
-  document.cookie = 'myData=' + encodeURIComponent(jsonData) + '; expires=' + expires + '; path=/';
-}
-
-// Fonction pour charger les données depuis un cookie
-function loadFromCookie() {
-  var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)myData\s*=\s*([^;]*).*$)|^.*$/, "$1");
-  if (cookieValue) {
-    return JSON.parse(decodeURIComponent(cookieValue));
-  } else {
-    return [];
-  }
-}
-
-// Charger les données depuis le cookie au chargement de la page
-var fakeDatabase = loadFromCookie();
-
-function editData(id) {
-  var item = fakeDatabase.find(function(item) {
-    return item.id === id;
-  });
-
-  if (!item) {
-    return;
-  }
-
-  var nameInput = document.getElementById('name');
-  var ageInput = document.getElementById('age');
-  nameInput.value = item.name;
-  ageInput.value = item.age;
-
-  // Stocke l'ID de l'élément en cours de modification
-  // pour ne pas le supprimer lors de l'ajout du nouvel élément
-  form.dataset.editId = id;
-}
-
-var form = document.getElementById('data-form');
-form.addEventListener('submit', addOrUpdateData);
-
-displayData();
+const ui = new UI();

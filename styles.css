@@ -1,76 +1,102 @@
+:root {
+    --primary: #2563eb;
+    --danger: #dc2626;
+    --gray: #e5e7eb;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f9fafb;
+}
 
-  h1{
-    text-align: center;
-  }
-  
-  label {
-    display: flex;
-    margin-bottom: 5px;
-  }
-  
-  table{
-    width: 100vw;
-    margin: 0.5em;
-  }
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-  fieldset {
-    display: flex;
-  }
+h1 { text-align: center; }
 
-  th {
-    width: 20%;
-  }
-
-  td {
-    width: 20%;
-    text-align: center;
-    border-radius: 0.5em;
-    border: 2px solid #535252;
-  }
-
-  .action{
-    width: 40%;
-  }
-
-  input {
-    margin-bottom: 10px;
-  }
-  
-  .input-grid {
-    display: grid;
-    grid-template-columns: 100px auto;
-    grid-gap: 10px;
-  }
-
-  .button{
-    background-color: rgb(131, 131, 131);
-    color: white;
-    text-transform: uppercase;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 0.3em;
-    padding: 1em 2em;
-    border: none;
-    border-radius: 1em;
-  }
-
-  .button--delete{
-    background-color: rgb(255, 0, 0);
-  }
-  
-  #data-container {
+.search-bar {
     margin-bottom: 20px;
-  }
-  
-  .action-buttons {
-    display: inline-block;
-  }
-  
-  .action-buttons button {
-    margin-left: 5px;
-  }
-  
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+}
+
+.table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray);
+}
+
+th { background: #f8fafc; }
+
+.button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 4px;
+}
+
+.button--primary {
+    background: var(--primary);
+    color: white;
+}
+
+.button--delete {
+    background: var(--danger);
+    color: white;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+}
+
+.error-container {
+    color: var(--danger);
+    margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+    .container { padding: 10px; }
+    th, td { padding: 8px; }
+}
