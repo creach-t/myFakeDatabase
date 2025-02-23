@@ -17,14 +17,14 @@ class UI {
     initializeTablesList() {
         const tables = Object.keys(this.db.schema.tables);
         const tableSelect = document.getElementById('table-select');
-        tableSelect.innerHTML = '<option value="">Sélectionner une table</option>' +
+        tableSelect.innerHTML = '<option value="">Sélectionner une table</option>' + 
             tables.map(table => `<option value="${table}">${table}</option>`).join('');
     }
 
     handleTableCreate(e) {
         e.preventDefault();
         const tableName = document.getElementById('table-name').value.trim();
-        this.db.schema.createTable(tableName, { 'id': 'number' });
+        this.db.schema.createTable(tableName);
         this.initializeTablesList();
         e.target.reset();
     }
@@ -65,6 +65,7 @@ class UI {
 
         this.render();
         e.target.reset();
+        document.querySelector('button[type="submit"]').textContent = 'Ajouter';
     }
 
     handleSearch(e) {
@@ -84,12 +85,12 @@ class UI {
                     <label for="${name}">${name}:</label>
                     <input type="${type}" id="${name}" name="${name}" required>
                 </div>
-            `).join('') + '
-            <button type="submit" class="button button--primary">Ajouter</button>';
+            `).join('') + 
+            '<button type="submit" class="button button--primary">Ajouter</button>';
     }
 
     edit(id) {
-        const record = this.db.getAll().find(r => r.id === id);
+        const record = this.db.getAll().find(r => r.id === parseInt(id));
         if (!record) return;
 
         Object.entries(record)
@@ -106,6 +107,11 @@ class UI {
     delete(id) {
         if (!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) return;
         this.db.delete(id);
+        if (this.currentId === id) {
+            document.getElementById('data-form').reset();
+            this.currentId = null;
+            document.querySelector('button[type="submit"]').textContent = 'Ajouter';
+        }
         this.render();
     }
 
@@ -118,10 +124,7 @@ class UI {
         const headers = Object.keys(fields);
 
         document.getElementById('data-container').innerHTML = `
-            <tr>
-                ${headers.map(field => `<th>${field}</th>`).join('')}
-                <th>Actions</th>
-            </tr>
+            <tr>${headers.map(field => `<th>${field}</th>`).join('')}<th>Actions</th></tr>
             ${records.map(record => `
                 <tr>
                     ${headers.map(field => `<td>${record[field]}</td>`).join('')}
@@ -133,5 +136,3 @@ class UI {
             `).join('')}`;
     }
 }
-
-export default UI;
