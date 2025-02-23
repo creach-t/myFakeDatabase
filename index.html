@@ -14,30 +14,31 @@
             <h2>Tables</h2>
             <form id="table-form">
                 <input type="text" id="table-name" placeholder="Nom de la table" required>
-                <button type="submit">Créer une table</button>
+                <button type="submit" class="button">Créer une table</button>
             </form>
         </div>
 
         <div class="section">
             <h2>Champs</h2>
-            <select id="table-select">
+            <select id="table-select" class="select">
                 <option value="">Sélectionner une table</option>
             </select>
 
             <form id="field-form">
                 <input type="text" id="field-name" placeholder="Nom du champ" required>
-                <select id="field-type">
+                <select id="field-type" class="select">
                     <option value="text">Texte</option>
                     <option value="number">Nombre</option>
                     <option value="date">Date</option>
                     <option value="email">Email</option>
                 </select>
-                <button type="submit">Ajouter un champ</button>
+                <button type="submit" class="button">Ajouter un champ</button>
             </form>
         </div>
 
         <div class="section">
-            <input type="text" id="search" placeholder="Rechercher...">
+            <h2>Données</h2>
+            <input type="text" id="search" placeholder="Rechercher..." class="search-input">
             
             <div class="table-container">
                 <table>
@@ -45,10 +46,13 @@
                 </table>
             </div>
 
-            <form id="data-form"></form>
+            <form id="data-form" class="data-form"></form>
         </div>
     </div>
 
-    <script type="module" src="js/main.js"></script>
+    <script src="js/Schema.js"></script>
+    <script src="js/Database.js"></script>
+    <script src="js/UI.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
