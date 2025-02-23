@@ -21,7 +21,7 @@ class Database {
 
     update(id, data) {
         const records = this.getAll();
-        const index = records.findIndex(record => record.id === id);
+        const index = records.findIndex(record => record.id === parseInt(id));
         if (index !== -1) {
             records[index] = { ...records[index], ...data };
             this.saveRecords(records);
@@ -30,7 +30,7 @@ class Database {
 
     delete(id) {
         const records = this.getAll();
-        this.saveRecords(records.filter(record => record.id !== id));
+        this.saveRecords(records.filter(record => record.id !== parseInt(id)));
     }
 
     getAll() {
@@ -58,5 +58,3 @@ class Database {
         );
     }
 }
-
-export default Database;
