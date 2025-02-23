@@ -16,30 +16,38 @@ body {
     margin: 0 auto;
 }
 
-h1 { text-align: center; }
-
-.search-bar {
+.section {
+    background: white;
+    padding: 20px;
     margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.search-input {
-    width: 100%;
+input, select {
     padding: 8px;
+    margin: 5px;
     border: 1px solid var(--gray);
     border-radius: 4px;
 }
 
-.table-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    overflow: hidden;
-    margin-bottom: 20px;
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+}
+
+.button--delete {
+    background: var(--danger);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    margin: 20px 0;
 }
 
 th, td {
@@ -48,55 +56,15 @@ th, td {
     border-bottom: 1px solid var(--gray);
 }
 
-th { background: #f8fafc; }
-
-.button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0 4px;
-}
-
-.button--primary {
-    background: var(--primary);
-    color: white;
-}
-
-.button--delete {
-    background: var(--danger);
-    color: white;
-}
-
-.form-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+th {
+    background: #f8fafc;
 }
 
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 15px;
 }
 
-label {
+.form-group label {
     display: block;
-    margin-bottom: 8px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--gray);
-    border-radius: 4px;
-}
-
-.error-container {
-    color: var(--danger);
-    margin-bottom: 16px;
-}
-
-@media (max-width: 600px) {
-    .container { padding: 10px; }
-    th, td { padding: 8px; }
+    margin-bottom: 5px;
 }
