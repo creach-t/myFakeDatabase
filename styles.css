@@ -31,13 +31,17 @@ input, select {
     border-radius: 4px;
 }
 
-button {
+.button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     background: var(--primary);
     color: white;
     cursor: pointer;
+}
+
+.button:hover {
+    opacity: 0.9;
 }
 
 .button--delete {
@@ -67,4 +71,31 @@ th {
 .form-group label {
     display: block;
     margin-bottom: 5px;
+}
+
+.search-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #1f2937;
+}
+
+.select {
+    margin-bottom: 15px;
+}
+
+#field-form {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#data-form {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray);
 }
